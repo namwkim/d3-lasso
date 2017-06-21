@@ -1,1 +1,1 @@
-export {default as lasso} from "./src/lasso";
+export {default as lasso} from './src/lasso';
