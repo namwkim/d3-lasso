@@ -100,7 +100,7 @@ export default function() {
 			.attr('r',5)
 			.attr('display',null);
 		// Run user defined start function
-		listeners.call('start', lasso, [items]);
+		listeners.call('start', lasso, items);
 	}
 
 	function dragmove() {
@@ -166,7 +166,7 @@ export default function() {
 			n.__lasso.possible = n.__lasso.hoverSelect || n.__lasso.loopSelect;
 		});
 
-		listeners.call('draw', lasso, [items, lasso.possibleItems(), lasso.notPossibleItems()]);
+		listeners.call('draw', lasso, items, lasso.possibleItems(), lasso.notPossibleItems());
 	}
 
 	function dragend() {
@@ -184,20 +184,25 @@ export default function() {
 		origin_node.attr('display','none');
 
 					// Run user defined end function
-		listeners.call('end', lasso, [items, lasso.selectedItems(), lasso.notSelectedItems()]);
+		listeners.call('end', lasso, items, lasso.selectedItems(), lasso.notSelectedItems());
 	}
-
+	lasso.clear = function(){//programmatically reset selection
+		if (items){
+			var nodes = items.nodes();
+			nodes.forEach(function(n) {
+				n.__lasso = {
+					'possible': false,
+					'selected': false
+				};
+			});
+		}
+		return lasso;
+	};
   // Set or get list of items for lasso to select
 	lasso.items  = function(_) {
 		if (!arguments.length) return items;
 		items = _;
-		var nodes = items.nodes();
-		nodes.forEach(function(n) {
-			n.__lasso = {
-				'possible': false,
-				'selected': false
-			};
-		});
+		lasso.clear();
 		return lasso;
 	};
 
